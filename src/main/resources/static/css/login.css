@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+/* login_area 영역 시작 */
+
+.login_area {
+    width: 100%;
+    padding-bottom: 100px;
+    display: flex;
+}
+
+.login_area_inner {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.login_area_inner h2 {
+    font-size: 30px;
+    letter-spacing: 0.08em;
+    font-weight: bold;
+    text-align: center;
+    padding: 90px 0 20px 0;
+}
+
+.login_area_inner form {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.login_input_id,
+.login_input_pwd {
+    width: 378px;
+    display: block;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.login_input_id {
+    margin-bottom: 10px;
+}
+
+.login_input_id:focus,
+.login_input_pwd:focus {
+    outline: none;
+}
+
+.find_area {
+    width: 100%;
+    text-align: right;
+    color: #999;
+    font-size: 14px;
+    padding: 15px 0;
+}
+
+.find_area a {
+    color: #999;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.find_area a:hover {
+    color: #222;
+}
+
+.btn_login {
+    display: inline-block;
+    color: #fff;
+    padding: 15px 0;
+    background-color: #222;
+    border: 1px solid #222;
+    width: 100%;
+    text-align: center;
+}
+
+.btn_login1 {
+    display: inline-block;
+    color: #fff;
+    padding: 15px 0;
+    margin-top: 10px;
+    background-color: #222;
+    border: 1px solid #222;
+    width: 368px;
+    text-align: center;
+}
+
+.btn_login:hover{
+    cursor: pointer;
+}
+
+.register_area {
+    width: 400px;
+    margin: 30px auto 0 513px;
+    padding: 30px 0;
+    border: 1px solid #e1e1e1;
+    font-size: 15px;
+    letter-spacing: 0;
+    font-weight: 300;
+    line-height: 1.5;
+    text-align: center;
+    color: #777;
+}
+
+.btn_login1:hover{
+    cursor: pointer;
+}
+
+.btn_register_area {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.btn_register {
+    display: inline-block;
+    color: #222;
+    font-weight: bold;
+    padding: 15px 0;
+    background-color: #fff;
+    border: 2px solid #222;
+    margin-top: 30px;
+    width: 150px;
+}
+/* login_area 영역 종료 */

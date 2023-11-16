@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+
+<body>
+<div class="container">
+  <div th:replace="fragments/navbar :: nav"></div>
+
+  <form method="post" action="" onsubmit="submitForm();">
+    <!-- id -->
+    <input type="hidden" name="id" th:value="${itemInfo.getId()}" />
+    <!-- 수정불가 -->
+    <div class="form-group">
+      <label>카테고리</label>
+      <input type="text" class="form-control" name="category" th:value="${itemInfo.getCategory()}" readonly/>
+    </div>
+    <!-- 다 수정 가능한 항목, -->
+    <div class="form-group">
+      <label>상품명</label>
+      <input type="text" class="form-control" name="name" th:value="${itemInfo.getName()}" placeholder="이름을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>가격</label>
+      <input type="number" class="form-control" name="price" th:value="${itemInfo.getPrice()}" placeholder="가격을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>수량</label>
+      <input type="number" class="form-control" name="stockQuantity" th:value="${itemInfo.getStockQuantity()}" placeholder="수량을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>정보</label>
+      <input type="text" class="form-control" name="info" th:value="${itemInfo.getInfo()}" placeholder="정보를 입력하세요">
+    </div>
+    <!-- 각 카테고리별 상세 정보 구분 -->
+    <div class="form-group">
+      <label>세부 사항</label>
+      <input type="text" class="form-control" name="cateDetail" th:value="${itemInfo.getCateDetail()}" placeholder="나이를 입력 하세요">
+    </div>
+
+
+    <button type="submit" class="btn btn-primary" >Submit</button>
+  </form>
+
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function submitForm() {
+    event.preventDefault(); // 폼 기본 동작 중단
+
+    var formData = {
+      id: document.querySelector('input[name="id"]').value,
+      name: document.querySelector('input[name="name"]').value,
+      price: document.querySelector('input[name="price"]').value,
+      stockQuantity: document.querySelector('input[name="stockQuantity"]').value,
+      info: document.querySelector('input[name="info"]').value,
+      category: document.querySelector('input[name="category"]').value,
+      cateDetail: document.querySelector('input[name="cateDetail"]').value,
+    };
+
+    // JSON 데이터 전송
+    fetch('/itemUpdate/api', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('서버 오류');
+              }
+            })
+            .then(data => {
+              alert(data.message); // 서버에서 받은 메시지 출력
+              if(data.status === 200) {
+                window.location.href = '/itemList';
+              } else {
+                window.location.reload();
+              }
+            })
+            .catch(error => {
+              alert('오류: ' + error.message);
+            });
+  }
+  var message = "[[${message}]]";
+  if (message && message.trim() !== "") {
+    alert(message);
+  }
+</script>
+</body>
+</html>

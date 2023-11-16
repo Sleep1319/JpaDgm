@@ -1,0 +1,144 @@
+<!--2023.10.20 DH-->
+<!--2023.10.23 DH-->
+<!DOCTYPE html>
+<html lang="" xmlns:th="http://www.thymeleaf.org">
+
+<!--<head th:replace="fragments/header :: header">-->
+<head>
+    <title>index</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="/css/myPage.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Navigation-->
+<!--<div th:replace="fragments/bodyNav :: nav"></div>-->
+
+<section class="contents">
+    <div class="container">
+        <div class="mypage_big_box mx-auto">
+            <div class="mypage">
+                <div class="board-container">
+                    <form id="myForm" method="post" role="form" onsubmit="submitForm();">
+                        <table class="table-condensed">
+                            <tr>
+                                <th>아이디</th>
+                                <td>
+                                    <input name="user_id" readonly th:value="${session.email}" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이름</th>
+                                <td>
+                                    <input name="name" readonly th:value="${session.name}" type="text">
+                                </td>
+                            </tr>
+                            <!--            <tr>-->
+                            <!--                <th>이메일</th>-->
+                            <!--                <td>-->
+                            <!--                    <input type="text" name="userEmail" class="userInfo" th:value="${userEmail}" readonly>-->
+                            <!--                </td>-->
+                            <!--            </tr>-->
+                            <tr>
+                                <th>전화번호</th>
+                                <td>
+                                    <input class="userInfo" name="phone" readonly th:value="${phone}" type="text">
+                                </td>
+                            </tr>
+                            <!--            <tr>-->
+                            <!--                <th>생년월일</th>-->
+                            <!--                <td>-->
+                            <!--                    <input type="text" name="userBirth" class="userInfo" th:value="${session.birth}" readonly>-->
+                            <!--                </td>-->
+                            <!--            </tr>-->
+                            <tr>
+                                <th>주소</th>
+                                <td>
+                                    <input class="userInfo" name="addr" readonly th:value="${address.getAddr()}"
+                                           type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>상세 주소</th>
+                                <td>
+                                    <input class="userInfo" name="detail_addr" readonly
+                                           th:value="${address.getDetail_addr()}" type="text">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>우편번호</th>
+                                <td>
+                                    <input class="userInfo" name="zipcode" readonly
+                                           th:value="${address.getZipcode()}" type="text">
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="btn-group">
+                            <input class="btn" onclick="chBoard()" type="button" value="수정">
+                            <input class="hiddenBtn" onclick="update('Insert')" type="submit" value="확인">
+                            <input class="hiddenBtn" onclick="location.reload()" type="button" value="취소">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer-->
+<!--    <div th:replace="fragments/footer :: footer"></div>-->
+</section>
+
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/indexScripts.js"></script>
+<script src="/js/myPage.js"></script>
+<script>
+    function submitForm() {
+        event.preventDefault(); // 폼 기본 동작 중단
+
+        var formData = {
+            phone: document.querySelector('input[name="phone"]').value,
+            addr: document.querySelector('input[name="addr"]').value,
+            detail_addr: document.querySelector('input[name="detail_addr"]').value,
+            zipcode: document.querySelector('input[name="zipcode"]').value
+        };
+
+        // JSON 데이터 전송
+        fetch('/myPage/api', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('서버 오류');
+                }
+            })
+            .then(data => {
+                alert(data.message); // 서버에서 받은 메시지 출력
+                if(data.status === 200) {
+                    window.location.href = '/myPage';
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                alert('오류: ' + error.message);
+            });
+    }
+</script>
+<script>
+    var message = "[[${message}]]";
+    if (message && message.trim() !== "") {
+        alert(message);
+    }
+</script>
+</body>
+</html>
+

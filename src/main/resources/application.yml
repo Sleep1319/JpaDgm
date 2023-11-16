@@ -1,0 +1,27 @@
+# ?? ?? ??
+server:
+  port: 8888
+
+# database ?? ??
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/JpaDgm?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password:
+  thymeleaf:
+    cache: false
+  #  web:
+  #    resources:
+  #      add-mappings: 'false'
+  #  mvc:
+  #    throw-exception-if-no-handler-found: 'true'
+
+
+  # spring data jpa ??
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create

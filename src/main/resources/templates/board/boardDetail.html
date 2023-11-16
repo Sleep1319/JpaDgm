@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+    <title>게시판 상세 페이지</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<!-- Section -->
+<section>
+    <h1>게시판 상세 페이지</h1>
+    <table>
+        <tr>
+            <th>제목</th>
+            <td th:text="${board.title}">게시글 제목</td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td th:text="${board.contents}">게시글 내용</td>
+        </tr>
+    </table>
+
+    <button onclick="listReq()">목록</button>
+<!--    <button onclick="updateReq([[${board.id}]])">수정</button>-->
+    <a th:href="@{/board/{id}/update (id = ${board.id})}">수정</a> <!-- 형식 변경 필요  -->
+    <button th:attr="boardId = ${board.id}" onclick="deleteReq(this.getAttribute('boardId'))">삭제</button>
+</section>
+
+<!-- 댓글 작성 부분 -->
+<form th:action="@{/comment/{id}/write}" th:object="${commentForm}" method="post">
+    <!-- Hidden field to pass boardId -->
+    <input type="hidden" name="id" th:field="*{id}" />
+    <label th:for="writer">작성자</label>
+    <input type="text" th:field="*{writer}" placeholder="Your Name" required />
+    <label th:for="contents">댓글</label>
+    <textarea th:field="*{contents}" placeholder="Your Comment" required></textarea>
+
+    <button type="submit">댓글작성</button>
+</form>
+
+<!-- 댓글 출력 부분 -->
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>작성자</th>
+        <th>내용</th>
+        <th>작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${commentList}">
+        <td th:text="${board.id}"></td>
+        <td><a th:text="${comment.writer} + ':' + ${comment.contents}"></a></td>
+        <td th:text="${comment.createDate} ? ${#temporals.format(comment.createDate,'yyyy-MM-dd HH:mm')} : ${comment.createDate}"></td>
+    </tr>
+    </tbody>
+</table>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a type="button" class="btn btn-primary" th:href="@{/comment/{id}/write}">작성</a>
+
+</div>
+<!-- Bootstrap core JS -->
+<script th:inline="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // 목록 요청
+    const listReq = () => {
+        console.log("목록 요청");
+        location.href = "/board/list";
+    }
+
+
+    function deleteReq (id) {
+        console.log("삭제 요청");
+        if (confirm('정말 삭제하시겠습니까?')) {
+            fetch(`/board/${id}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then(response => {
+                if (response.ok) {
+                    alert('삭제 성공');
+                    location.href = '/board/List';
+                } else {
+                    throw new Error('서버 오류');
+                }
+            })
+                // .then(data => {
+                //     alert(data.message); // 서버에서 받은 메시지 출력
+                //     if (data.status === 200) {
+                //         window.location.href = '/memberList';
+                //     } else {
+                //         window.location.reload();
+                //     }
+                // })
+                // .catch(error => {
+                //     alert('오류: ' + error.message);
+                // });
+        }
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

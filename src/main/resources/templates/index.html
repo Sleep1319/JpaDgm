@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+
+<head th:replace="fragments/header :: header">
+    <title>index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<!-- Navigation-->
+<div th:replace="fragments/navbar :: nav"></div>
+<!-- Header-->
+<header>
+    <img src="/img/top-background.png" alt="Bootstrap" width="100%">
+</header>
+<a href="/userItemDetail">상품 상세정보 임시 이동</a>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Food List -->
+            <div th:if="${!proteinList.isEmpty()}">
+                <h2>protein List</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                    <div th:each="protein : ${proteinList}" class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image -->
+                            <img alt="..." class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" />
+                            <!-- Product details -->
+                            <div class="card-body p-4">
+                                [[${protein.getInfo()}]]
+                                <div class="text-center">
+                                    <!-- Product name -->
+                                    <h5 class="fw-bolder">[[${protein.getName()}]]</h5>
+                                    <!-- Product price -->
+                                    [[${protein.getPrice()}]]
+                                </div>
+                            </div>
+                            <!-- Product actions -->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                            th:href="@{/item/{id}/detail (id=${protein.id})}">View options</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Snack List -->
+            <div th:if="${!equipmentList.isEmpty()}">
+                <h2>equipment List</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                    <div th:each="equipment : ${equipmentList}" class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge -->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                Sale
+                            </div>
+                            <!-- Product image -->
+                            <img alt="..." class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" />
+                            <!-- Product details -->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    [[${equipment.getInfo()}]]
+                                    <!-- Product name -->
+                                    <h5 class="fw-bolder">[[${equipment.getName()}]]</h5>
+                                    <!-- Product reviews -->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price -->
+                                    <span class="text-muted text-decoration-line-through">
+                                            [[${equipment.getPrice()}]]
+                                        </span>
+                                </div>
+                            </div>
+                            <!-- Product actions -->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                            th:href="@{/item/{id}/detail (id=${equipment.id})}">View options</a></div>
+                                <!--                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer-->
+<div th:replace="fragments/footer :: footer"></div>
+<script>
+    var message = "[[${message}]]";
+    if (message && message.trim() !== "") {
+        alert(message);
+    }
+</script>
+</body>
+</html>

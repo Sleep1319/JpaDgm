@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+
+<body>
+<div class="container">
+    <div th:replace="fragments/navbar :: nav"></div>
+<!--    <div>-->
+<!--        <div>-->
+<!--            <form th:object="${orderSearch}" class="form-inline">-->
+<!--                <div class="form-group mb-2">-->
+<!--                    <input type="text" th:field="*{memberName}" class="form-control" placeholder="회원명" />-->
+<!--                </div>-->
+<!--                <div class="form-group mx-sm-1 mb-2">-->
+<!--                    <select th:field="*{orderStatus}" class="form-control">-->
+<!--                        <option value="">주문상태</option>-->
+<!--                        <option th:each="status : ${T(jpaDgm.jpaDgm.domain.OrderStatus).values()}"-->
+<!--                                th:value="${status}"-->
+<!--                                th:text="${status}">option</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div>
+        <table class="table table-striped" th:if="${!orderList.isEmpty()}">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>회원명</th>
+                <th>대표상품이름</th>
+                <th>대표상품 주문가격</th>
+                <th>대표상품 주문수량</th>
+                <th>상태</th>
+                <th>일시</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${orderList}">
+                <td th:text="${item.getId()}"></td>
+                <td th:text="${item.getMember().getName()}"></td>
+                <td th:text="${item.getOrderItems()[0].getItem().getName()}"></td>
+                <td th:text="${item.getOrderItems()[0].getTotalPrice()}"></td>
+                <td th:text="${item.getOrderItems()[0].getCount()}"></td>
+                <td th:text="${item.getStatus()}"></td>
+                <td th:text="${item.getOrder_date()}"></td>
+                <td>
+                    <a th:if="${item.getStatus().name() == 'ORDER'}" href="#"
+                       th:href="'javascript:cancel(' + ${item.getId()} + ')'"
+                       class="btn btn-danger">CANCEL</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <h1 th:if="${orderList.isEmpty()}">주문 기록이 없습니다</h1>
+    </div>
+
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+
+<script>
+    function cancel() {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/orders/" + id + "/cancel");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+</html>

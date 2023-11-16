@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 100px;
+        }
+        .container h2 {
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+        button{
+            float:right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<div class="container">
+    <form role="form" action="/signup" method="post" onsubmit="submitForm();">
+        <div th:class="form-group">
+            <label th:for="user_id">아이디</label>
+            <input type="text" class="form-control" name="email" placeholder="이메일을 입력하세요.">
+
+        </div>
+
+        <div th:class="form-group">
+            <label th:for="pw">비밀번호</label>
+            <input type="password" class="form-control" name="pw" placeholder="비밀번호를 입력하세요.">
+
+        </div>
+
+        <div th:class="form-group">
+            <label th:for="name">이름</label>
+            <input type="text" class="form-control" name="name" placeholder="이름을 입력하세요.">
+
+        </div>
+
+
+        <div th:class="form-group">
+            <label th:for="phone">전화번호</label>
+            <input type="text" class="form-control" name="phone" placeholder="전화번호를 입력하세요.">
+        </div>
+
+        <input class="postBut" type="button" value="우편번호찾기" onclick="kakaopost()">
+
+        <div th:class="form-group">
+            <label th:for="city">주소</label>
+            <input id="LOGIN_ADDR" type="text" name="addr" size="20" placeholder="주소" class="form-control">
+        </div>
+
+        <div th:class="form-group">
+            <label th:for="detail_addr">상세주소</label>
+            <input id="ADDR_DETAIL" type="text" name="detail_addr" placeholder="상세주소" class="form-control">
+        </div>
+
+        <div th:class="form-group">
+            <label th:for="zipcode">우편번호</label>
+            <input id="LOGIN_POST" type="text"  name="zipcode" placeholder="우편번호" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+</div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function kakaopost() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.querySelector("#LOGIN_POST").value = data.zonecode;
+                    document.querySelector("#LOGIN_ADDR").value =  data.address
+                    document.querySelector("input[name=detail_addr]").focus(); //상세입력 포커싱
+                }
+            }).open();
+        }
+
+        var message = "[[${message}]]";
+        if (message && message.trim() !== "") {
+            alert(message);
+        }
+    </script>
+</body>
+</html>

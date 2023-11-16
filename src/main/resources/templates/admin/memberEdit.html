@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+
+<body>
+<div class="container">
+  <div th:replace="fragments/navbar :: nav"></div>
+
+<!--  <form action="#" th:action="/memberEdit" method="#" th:method="put">&lt;!&ndash;몰라 시발 안되면 다시해&ndash;&gt;-->
+  <form action="" method="post" onsubmit="submitForm();">
+    <input type="hidden" name="_method" value="PUT"/>
+    <input type="hidden" name="id" th:value="${memberForm.getId()}">
+
+    <div class="form-group">
+      <label>이메일</label>
+      <input type="text" class="form-control" name="email" th:value="${memberForm.getEmail()}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>비밀번호</label>
+      <input type="text" class="form-control" name="pw" th:value="${memberForm.getPw()}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>이름</label>
+      <input type="text" class="form-control" name="name" th:value="${memberForm.getName()}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>전화번호</label>
+      <input type="text" class="form-control" name="phone" th:value="${memberForm.getPhone()}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>등급</label>
+      <div>
+        <label>
+          <input type="radio" name="role" th:value="ADMIN" th:checked="${memberForm.getRole() == 'ADMIN'}"> ADMIN
+        </label>
+        <label>
+          <input type="radio" name="role" th:value="USER" th:checked="${memberForm.getRole() == 'USER'}"> USER
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>주소</label>
+      <input type="text" class="form-control" name="addr" th:value="${memberForm.getAddress().addr}">
+    </div>
+
+    <div class="form-group">
+      <label>상세주소</label>
+      <input type="text" class="form-control" name="detail_addr" th:value="${memberForm.getAddress().detail_addr}">
+    </div>
+
+    <div class="form-group">
+      <label>우편번호</label>
+      <input type="text" class="form-control" name="zipcode" th:value="${memberForm.getAddress().zipcode}">
+    </div>
+    <button type="submit" class="btn btn-primary" onsubmit="submitForm()">수정하기</button>
+  </form>
+
+
+
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function submitForm() {
+    event.preventDefault(); // 폼 기본 동작 중단
+
+    var formData = {
+      id: document.querySelector('input[name="id"]').value,
+      email: document.querySelector('input[name="email"]').value,
+      pw: document.querySelector('input[name="pw"]').value,
+      name: document.querySelector('input[name="name"]').value,
+      phone: document.querySelector('input[name="phone"]').value,
+      role: document.querySelector('input[name="role"]').value,
+      addr: document.querySelector('input[name="addr"]').value,
+      detail_addr: document.querySelector('input[name="detail_addr"]').value,
+      zipcode: document.querySelector('input[name="zipcode"]').value
+    };
+
+
+    // JSON 데이터 전송
+    fetch('/memberUpdate', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('서버 오류');
+              }
+            })
+            .then(data => {
+              alert(data.message); // 서버에서 받은 메시지 출력
+              if(data.status === 200) {
+                window.location.href = '/memberList';
+              } else {
+                window.location.reload();
+              }
+            })
+            .catch(error => {
+              alert('오류: ' + error.message);
+            });
+  }
+</script>
+</body>

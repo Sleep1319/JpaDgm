@@ -1,0 +1,156 @@
+<head th:replace="fragments/header :: header">
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body class="bg-light">
+
+<nav th:replace="fragments/navbar :: nav"></nav>
+
+<div class="container mt-5">
+    <section class="contents">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <form id="myForm" method="post" role="form" onsubmit="submitForm();">
+                                <table class="table table-condensed">
+
+                                    <tr>
+                                        <th>상품 이름</th>
+                                        <td>
+                                            <input type="hidden" name="itemId" th:value="${item.getId()}">
+                                            <input name="itemName" readonly th:value="${item.getName()}" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>구매 개수</th>
+                                        <td>
+                                            <input class="userInfo" name="count" readonly th:value="${count}" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>가격</th>
+                                        <td>
+                                            <input class="userInfo" name="price" readonly th:value="${item.getPrice() * count}" type="text">
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+
+                    <button id="check_pay" type="button" class="btn btn-primary mt-3">테스트결제</button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+</div>
+
+<!-- Bootstrap core JS and other scripts -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+<script>
+    $("#check_pay").click(function () {
+        var IMP = window.IMP;
+        IMP.init('imp87012411');//포트원 테스트 결제 들어가서 등록하고 가져온 키값을 대입하시오
+
+        IMP.request_pay({
+            pg : 'kakaopay',
+            pay_method : 'card',
+            merchant_uid : createOrderNum(),
+            name : '[[${item.getName()}]]',
+            amount : [[${item.getPrice * count}]],
+            item_type : '[[${item.getCategory()}]]'	,
+            buyer_email : '[[${session.email}]]',
+            buyer_name : '[[${session.name}]]',
+            buyer_tel : '[[${phone}]]',
+            buyer_addr : '[[${address.getAddr()}]] [[${address.getDetail_addr()}]]',
+            buyer_postcode : '[[${address.getZipcode()}]]'
+
+        }, function (rsp) {
+
+            if(rsp.success) {
+                jQuery.ajax({
+                //검증식 추가 필요
+
+                }).done(function(data) {
+                    //검증식 결과에 따른 실행 조건 필요
+                    data = JSON.stringify({
+                        item_id: [[${item.getId()}]],
+                        member_id: [[${session.member_id}]],
+                        count: [[${count}]],
+                        order_num: createOrderNum()
+                    });
+
+                    jQuery.ajax({
+                        url: "/orderInsert/api",
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        data: data
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+
+                            } else {
+                                throw new Error('서버 오류');
+                            }
+                        })
+                        //수정필요
+                        .then(data => {
+                            alert(data.message);
+                            if(data.status === 200) {
+
+                            } else {
+                                alert('주문등록 실패')
+                            }
+                        })
+                        .catch(error => {
+                            alert('오류: ' + error.message);
+                        });
+
+                    //검증 다를시
+                });
+                location.href="/userOrderList";
+            } else {
+                var msg = '결제 실패했습니다.';
+                msg += '에러내용 : ' + rsp.error_msg;
+
+                alert(msg);
+            }
+        });
+
+    });
+
+    //주문번호 생성
+    function createOrderNum(){
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        let orderNum = year + month + day;
+        for(let i=0;i<10;i++) {
+            orderNum += Math.floor(Math.random() * 8);
+        }
+        return orderNum;
+    }
+</script>
+</body>
+</html>

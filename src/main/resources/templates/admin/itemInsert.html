@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+
+<body>
+<div class="container">
+    <div th:replace="fragments/navbar :: nav"></div>
+
+    <form action="/itemInsert" th:object="${form}" method="post">
+        <div class="form-group">
+            <label th:for="name">상품명</label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="price">가격</label>
+            <input type="number" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="stockQuantity">수량</label>
+            <input type="number" th:field="*{stockQuantity}" class="form-control" placeholder="수량을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="info">정보</label>
+            <input type="text" th:field="*{info}" class="form-control" placeholder="정보를 입력하세요">
+        </div>
+
+        <label th:for="category">카테고리</label>
+        <input type="text" th:field="*{category}" name="category" class="form-control" placeholder="카테고리정보 입력">
+<!--        <select th:field="*{category}" name="category" id="categorySelect" class="form-select">-->
+<!--            <option value="">카테고리를 선택하세요</option>-->
+<!--            <option value="Food">사료</option>-->
+<!--            <option value="Snack">간식</option>-->
+<!--            <option value="Supplies">도구</option>-->
+<!--        </select>-->
+
+        <div class="form-group" id="categoryDetailsDiv">
+            <label th:for="cateDetail">세부 정보</label>
+            <input type="text" name="cateDetail" id="categoryDetails" class="form-control" placeholder="세부 정보를 입력하세요">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // const categorySelect = document.getElementById('categorySelect');
+    // const categoryDetailsDiv = document.getElementById('categoryDetailsDiv');
+    // const categoryDetailsInput = document.getElementById('categoryDetails');
+    //
+    // categorySelect.addEventListener('change', function() {
+    //     const selectedCategory = categorySelect.value;
+    //
+    //     // 첫 번째 카테고리 값 선택 시, 세부 정보 입력란을 보이게 하고 아닌 경우 숨깁니다.
+    //     if (selectedCategory !== '') {
+    //         categoryDetailsDiv.style.display = 'block';
+    //     } else {
+    //         categoryDetailsDiv.style.display = 'none';
+    //     }
+    //
+    //     // 선택한 카테고리 값을 세부 정보 입력란의 placeholder에 넣습니다.
+    //     if (selectedCategory === 'Food') {
+    //         categoryDetailsInput.placeholder = '나이를 입력하세요';
+    //     } else if (selectedCategory === 'Snack') {
+    //         categoryDetailsInput.placeholder = '재료를 입력하세요';
+    //     } else if (selectedCategory === 'Supplies') {
+    //         categoryDetailsInput.placeholder = '용도를 입력하세요';
+    //     }
+    // });
+
+    var message = "[[${message}]]";
+    if (message && message.trim() !== "") {
+        alert(message);
+    }
+</script>
+</body>
+</html>

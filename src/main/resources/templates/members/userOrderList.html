@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+
+<head th:replace="fragments/header :: header">
+    <title>index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<!-- Navigation-->
+<div th:replace="fragments/navbar :: nav"></div>
+<!-- Header-->
+<header>
+    <img src="/img/top-background.png" alt="Bootstrap" width="100%">
+</header>
+<table class="table table-striped" th:if="${!userOrderList.isEmpty()}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>상품명</th>
+        <th>상품개수</th>
+        <th>상품가격</th>
+        <th>주소</th>
+        <th>상세 주소</th>
+        <th>우편번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${userOrderList}">
+        <td th:text="${order.getId()}"></td>
+        <td th:text="${order.getOrderItems()[0].getItem().getName()}"></td>
+        <td th:text="${order.getOrderItems()[0].getCount()}"></td>
+        <td th:text="${order.getOrderItems()[0].getTotalPrice()}"></td>
+        <td th:text="${order.getDelivery().getAddress().getAddr()}"></td>
+        <td th:text="${order.getDelivery().getAddress().getDetail_addr()}"></td>
+        <td th:text="${order.getDelivery().getAddress().getZipcode()}"></td>
+        <!-- ? 뜻 : null + able = null을 허용한다.-->
+<!--        <td>-->
+<!--            <a th:href="@{/members/{id}/edit (id=${member.id})}" class="btn btn-primary" role="button">수정</a>-->
+<!--            <a th:href="@{/members/{id}/delete (id=${member.id})}" class="btn btn-danger" role="button">삭제</a>-->
+<!--        </td>-->
+    </tr>
+    </tbody>
+</table>
+<h1 th:if="${userOrderList.isEmpty()}">주문 기록이 없습니다</h1>
+<!-- Footer-->
+<div th:replace="fragments/footer :: footer"></div>
+<script>
+    var message = "[[${message}]]";
+    if (message && message.trim() !== "") {
+        alert(message);
+    }
+</script>
+</body>
+</html>
