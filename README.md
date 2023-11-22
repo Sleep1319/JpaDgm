@@ -28,6 +28,9 @@
   <img src="https://img.shields.io/badge/devtools-0099E5?style=flat&logo=devtools&logoColor=white"/>
   <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white"/>
 
+  <h3>ERD</h3>
+  https://www.erdcloud.com/d/E87aYDaLnoY7k6wwk
+
   <hr>
   <h2>jpa를 활용한 MySql 기반 쇼핑몰 구현 프로젝트</h2>
   Jpa의 이해와 CRUD의 흐름을 이해 하기 위해 시작한 프로젝트 이다 
