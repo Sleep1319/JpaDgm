@@ -54,11 +54,9 @@ public class OrderService {
      * 검색
      * */
     //임시 주문 조회
-    @Transactional
-    public List<Orders> findByOrders(Long memberId) { return orderRepository.findByMemberId(memberId); }
 
+    public List<Orders> findByOrders(Long memberId) { return orderRepository.findByMemberId(memberId); }
     public List<Orders> findAllOrders() { return orderRepository.findAllOrders(); }
-    @Transactional
     public List<Orders> findSearchOrders(OrderSearch orderSearch) { return orderRepository.findAllByString(orderSearch);}
 
 
